@@ -4,6 +4,7 @@ import { useForm, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useActionState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -28,7 +29,7 @@ type LoginFormValues = z.infer<typeof LoginSchema>;
 
 export function LoginForm() {
   const { toast } = useToast();
-  const [state, formAction] = useActionState<FormState, FormData>(login, null);
+  const [state, formAction, isPending] = useActionState<FormState, FormData>(login, null);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginSchema),
@@ -56,7 +57,6 @@ export function LoginForm() {
       <form
         ref={formRef}
         action={formAction}
-        onSubmit={form.handleSubmit(() => formRef.current?.requestSubmit())}
         className="space-y-4"
       >
         <FormField
@@ -85,17 +85,16 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <SubmitButton />
+        <SubmitButton isPending={isPending} />
       </form>
     </Form>
   );
 }
 
-function SubmitButton() {
-    const { formState } = useFormContext();
+function SubmitButton({ isPending }: { isPending: boolean }) {
     return (
-        <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
-             {formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        <Button type="submit" className="w-full" disabled={isPending}>
+             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Log In
         </Button>
     )
