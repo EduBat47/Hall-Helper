@@ -80,20 +80,20 @@ const LoginSchema = z.object({
     password: z.string().min(1, "Password is required"),
 });
 
-export async function login(prevState: FormState, formData: FormData) {
+export async function login(prevState: FormState, formData: FormData): Promise<FormState> {
     const validatedFields = LoginSchema.safeParse(Object.fromEntries(formData.entries()));
 
     if (!validatedFields.success) {
-        return { type: 'error', message: "Invalid email or password." } as FormState;
+        return { type: 'error', message: "Invalid email or password." };
     }
     
     // In a real app, you'd validate against a database
     if (validatedFields.data.email === 'admin@hallcomplaint.com' && validatedFields.data.password === '12345') {
         const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
         cookies().set('session', 'admin-logged-in', { expires, httpOnly: true });
-        redirect('/admin/dashboard');
+        return { type: 'success', message: 'Login successful' };
     } else {
-        return { type: 'error', message: 'Invalid credentials.' } as FormState;
+        return { type: 'error', message: 'Invalid credentials.' };
     }
 }
 

@@ -1,9 +1,9 @@
 'use client';
 
-import { useForm, useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -29,6 +29,7 @@ type LoginFormValues = z.infer<typeof LoginSchema>;
 
 export function LoginForm() {
   const { toast } = useToast();
+  const router = useRouter();
   const [state, formAction, isPending] = useActionState<FormState, FormData>(login, null);
 
   const form = useForm<LoginFormValues>({
@@ -39,8 +40,6 @@ export function LoginForm() {
     },
   });
 
-  const formRef = useRef<HTMLFormElement>(null);
-
   useEffect(() => {
     if (state?.type === 'error') {
       toast({
@@ -50,13 +49,21 @@ export function LoginForm() {
       });
       form.setValue('password', '');
     }
-  }, [state, toast, form]);
+    if (state?.type === 'success') {
+      router.push('/admin/dashboard');
+    }
+  }, [state, toast, form, router]);
 
   return (
     <Form {...form}>
       <form
-        ref={formRef}
         action={formAction}
+        onSubmit={form.handleSubmit((data, event) => {
+            const formData = new FormData();
+            formData.append('email', data.email);
+            formData.append('password', data.password);
+            formAction(formData);
+        })}
         className="space-y-4"
       >
         <FormField
@@ -85,17 +92,11 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <SubmitButton isPending={isPending} />
-      </form>
-    </Form>
-  );
-}
-
-function SubmitButton({ isPending }: { isPending: boolean }) {
-    return (
         <Button type="submit" className="w-full" disabled={isPending}>
              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Log In
         </Button>
-    )
+      </form>
+    </Form>
+  );
 }
