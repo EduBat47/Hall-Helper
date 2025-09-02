@@ -52,3 +52,13 @@ export async function updateComplaintStatus(id: string, status: ComplaintStatus)
   }
   return undefined;
 }
+
+export async function deleteComplaint(id: string): Promise<void> {
+    await delay(250);
+    const complaintIndex = global.complaints!.findIndex(c => c.id === id);
+    if (complaintIndex !== -1) {
+        global.complaints!.splice(complaintIndex, 1);
+    } else {
+        throw new Error('Complaint not found');
+    }
+}

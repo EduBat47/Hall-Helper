@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { addComplaint, updateComplaintStatus } from './data';
+import { addComplaint, updateComplaintStatus, deleteComplaint } from './data';
 import { revalidatePath } from 'next/cache';
 import { complaintCategories, complaintStatuses, type ComplaintStatus } from './types';
 import { cookies } from 'next/headers';
@@ -114,4 +114,19 @@ export async function login(prevState: FormState, formData: FormData): Promise<F
 export async function logout() {
     cookies().delete('session');
     redirect('/admin/login');
+}
+
+
+export async function deleteComplaintAction(id: string) {
+    if (!id) {
+        return { error: "Invalid ID provided" };
+    }
+
+    try {
+        await deleteComplaint(id);
+        revalidatePath('/admin/dashboard');
+        return { success: "Complaint deleted successfully" };
+    } catch (e) {
+        return { error: "Failed to delete complaint" };
+    }
 }
