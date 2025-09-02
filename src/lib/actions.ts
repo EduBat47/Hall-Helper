@@ -88,7 +88,7 @@ export async function login(prevState: FormState, formData: FormData) {
     }
     
     // In a real app, you'd validate against a database
-    if (validatedFields.data.email === 'admin@hallhelper.com' && validatedFields.data.password === 'password') {
+    if (validatedFields.data.email === 'admin@hallcomplaint.com' && validatedFields.data.password === '12345') {
         const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
         cookies().set('session', 'admin-logged-in', { expires, httpOnly: true });
     } else {
