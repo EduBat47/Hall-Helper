@@ -84,18 +84,17 @@ export async function login(prevState: FormState, formData: FormData) {
     const validatedFields = LoginSchema.safeParse(Object.fromEntries(formData.entries()));
 
     if (!validatedFields.success) {
-        return { type: 'error', message: "Invalid email or password." };
+        return { type: 'error', message: "Invalid email or password." } as FormState;
     }
     
     // In a real app, you'd validate against a database
     if (validatedFields.data.email === 'admin@hallcomplaint.com' && validatedFields.data.password === '12345') {
         const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
         cookies().set('session', 'admin-logged-in', { expires, httpOnly: true });
+        redirect('/admin/dashboard');
     } else {
-        return { type: 'error', message: 'Invalid credentials.' };
+        return { type: 'error', message: 'Invalid credentials.' } as FormState;
     }
-
-    redirect('/admin/dashboard');
 }
 
 export async function logout() {
