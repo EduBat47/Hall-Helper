@@ -13,7 +13,7 @@ export function Header() {
   const navLinks = [
     { href: '/', label: 'Submit Complaint' },
     { href: '/track', label: 'Track Complaint' },
-    { href: '/admin/login', label: 'Admin Login' },
+    { href: '/admin/login', label: 'Admin Panel' },
   ];
 
   return (
