@@ -58,12 +58,6 @@ export function LoginForm() {
     <Form {...form}>
       <form
         action={formAction}
-        onSubmit={form.handleSubmit((data, event) => {
-            const formData = new FormData();
-            formData.append('email', data.email);
-            formData.append('password', data.password);
-            formAction(formData);
-        })}
         className="space-y-4"
       >
         <FormField
