@@ -22,7 +22,7 @@ let complaints: Complaint[] = [
   {
     id: 'TICKET-34567',
     roomNumber: 'C-310',
-    category: 'Resolved',
+    category: 'Maintenance',
     description: 'The window latch is broken and the window does not close properly.',
     status: 'Resolved',
     createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
