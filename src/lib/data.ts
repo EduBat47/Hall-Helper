@@ -4,12 +4,17 @@ import type { Complaint, ComplaintStatus } from './types';
 // We use a global variable to prevent the in-memory store from being reset during development hot-reloads.
 declare global {
   var complaints: Complaint[] | undefined;
+  var complaintCounter: number | undefined;
 }
 
 const initialComplaints: Complaint[] = [];
 
 if (!global.complaints) {
   global.complaints = initialComplaints;
+}
+
+if (global.complaintCounter === undefined) {
+  global.complaintCounter = 10000;
 }
 
 // Simulate database latency
@@ -27,9 +32,10 @@ export async function getComplaintById(id: string): Promise<Complaint | undefine
 
 export async function addComplaint(data: Omit<Complaint, 'id' | 'status' | 'createdAt'>): Promise<Complaint> {
   await delay(300);
+  global.complaintCounter! += 1;
   const newComplaint: Complaint = {
     ...data,
-    id: `TICKET-${Math.floor(Math.random() * 90000) + 10000}`,
+    id: `TICKET-${global.complaintCounter!}`,
     status: 'Reported',
     createdAt: new Date(),
   };
