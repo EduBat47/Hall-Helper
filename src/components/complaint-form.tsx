@@ -64,8 +64,6 @@ export function ComplaintForm() {
     },
   });
 
-  const formRef = useRef<HTMLFormElement>(null);
-
   useEffect(() => {
     if (state?.type === 'error') {
       toast({
@@ -85,9 +83,8 @@ export function ComplaintForm() {
     <>
       <Form {...form}>
         <form
-          ref={formRef}
           action={formAction}
-          onSubmit={form.handleSubmit(() => formRef.current?.requestSubmit())}
+          onSubmit={form.handleSubmit(() => form.trigger())}
           className="space-y-6"
         >
           <FormField
