@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useActionState, useEffect, useRef, useState } from 'react';
@@ -176,7 +176,7 @@ export function ComplaintForm() {
 }
 
 function SubmitButton() {
-    const { formState } = useForm();
+    const { formState } = useFormContext();
     return (
         <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
             {formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
