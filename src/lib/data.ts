@@ -6,40 +6,7 @@ declare global {
   var complaints: Complaint[] | undefined;
 }
 
-const initialComplaints: Complaint[] = [
-  {
-    id: 'TICKET-12345',
-    roomNumber: 'A-101',
-    category: 'Plumbing',
-    description: 'Leaky faucet in the bathroom sink. It has been dripping constantly for two days.',
-    status: 'Reported',
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-  },
-  {
-    id: 'TICKET-23456',
-    roomNumber: 'B-205',
-    category: 'Electrical',
-    description: 'The main overhead light in the bedroom is flickering.',
-    status: 'In Progress',
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
-  },
-  {
-    id: 'TICKET-34567',
-    roomNumber: 'C-310',
-    category: 'Maintenance',
-    description: 'The window latch is broken and the window does not close properly.',
-    status: 'Resolved',
-    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
-  },
-    {
-    id: 'TICKET-45678',
-    roomNumber: 'D-404',
-    category: 'Heating',
-    description: 'Radiator is not working, room is very cold.',
-    status: 'Assigned',
-    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
-  },
-];
+const initialComplaints: Complaint[] = [];
 
 if (!global.complaints) {
   global.complaints = initialComplaints;
