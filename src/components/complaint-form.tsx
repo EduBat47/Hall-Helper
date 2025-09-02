@@ -3,7 +3,7 @@
 import { useForm, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useActionState, useEffect, useRef, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -53,7 +53,7 @@ export function ComplaintForm() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [submittedId, setSubmittedId] = useState<string | null>(null);
 
-  const [state, formAction] = useActionState<FormState, FormData>(submitComplaint, null);
+  const [state, formAction, isPending] = useActionState<FormState, FormData>(submitComplaint, null);
   
   const form = useForm<ComplaintFormValues>({
     resolver: zodResolver(ComplaintSchema),
@@ -84,7 +84,6 @@ export function ComplaintForm() {
       <Form {...form}>
         <form
           action={formAction}
-          onSubmit={form.handleSubmit(() => form.trigger())}
           className="space-y-6"
         >
           <FormField
@@ -106,7 +105,7 @@ export function ComplaintForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value} name={field.name}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a category" />
@@ -148,7 +147,10 @@ export function ComplaintForm() {
               </FormItem>
             )}
           />
-          <SubmitButton />
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Submit Complaint
+          </Button>
         </form>
       </Form>
       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -170,14 +172,4 @@ export function ComplaintForm() {
       </AlertDialog>
     </>
   );
-}
-
-function SubmitButton() {
-    const { formState } = useFormContext();
-    return (
-        <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
-            {formState.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Submit Complaint
-        </Button>
-    )
 }
