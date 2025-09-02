@@ -39,7 +39,21 @@ import { categoryIcons } from '@/lib/icons';
 import { Loader2 } from 'lucide-react';
 
 const ComplaintSchema = z.object({
-  roomNumber: z.string().min(1, 'Room number is required.'),
+  roomNumber: z
+    .string()
+    .min(1, 'Room number is required.')
+    .refine(
+      (val) => {
+        const num = parseInt(val, 10);
+        if (isNaN(num)) return false;
+        const floor = Math.floor(num / 100);
+        const room = num % 100;
+        return floor >= 1 && floor <= 5 && room >= 1 && room <= 50;
+      },
+      {
+        message: 'Invalid room number. Use 101-150, 201-250, 301-350, 401-450, or 501-550.',
+      }
+    ),
   category: z.enum(complaintCategories, {
     errorMap: () => ({ message: 'Please select a valid category.' }),
   }),
@@ -93,7 +107,7 @@ export function ComplaintForm() {
               <FormItem>
                 <FormLabel>Room Number</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g., A-101" {...field} />
+                  <Input placeholder="e.g., 101" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
