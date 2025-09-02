@@ -91,7 +91,7 @@ export async function login(prevState: FormState, formData: FormData): Promise<F
     if (validatedFields.data.email === 'admin@hallcomplaint.com' && validatedFields.data.password === '12345') {
         const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
         cookies().set('session', 'admin-logged-in', { expires, httpOnly: true });
-        return { type: 'success', message: 'Login successful' };
+        redirect('/admin/dashboard');
     } else {
         return { type: 'error', message: 'Invalid credentials.' };
     }

@@ -29,7 +29,6 @@ type LoginFormValues = z.infer<typeof LoginSchema>;
 
 export function LoginForm() {
   const { toast } = useToast();
-  const router = useRouter();
   const [state, formAction, isPending] = useActionState<FormState, FormData>(login, null);
 
   const form = useForm<LoginFormValues>({
@@ -49,10 +48,7 @@ export function LoginForm() {
       });
       form.setValue('password', '');
     }
-    if (state?.type === 'success') {
-      router.push('/admin/dashboard');
-    }
-  }, [state, toast, form, router]);
+  }, [state, toast, form]);
 
   return (
     <Form {...form}>
