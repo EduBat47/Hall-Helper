@@ -1,8 +1,12 @@
 import type { Complaint, ComplaintStatus } from './types';
-import { complaintCategories } from './types';
 
 // In-memory store for demonstration purposes
-let complaints: Complaint[] = [
+// We use a global variable to prevent the in-memory store from being reset during development hot-reloads.
+declare global {
+  var complaints: Complaint[] | undefined;
+}
+
+const initialComplaints: Complaint[] = [
   {
     id: 'TICKET-12345',
     roomNumber: 'A-101',
@@ -37,17 +41,21 @@ let complaints: Complaint[] = [
   },
 ];
 
+if (!global.complaints) {
+  global.complaints = initialComplaints;
+}
+
 // Simulate database latency
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function getComplaints(): Promise<Complaint[]> {
   await delay(200);
-  return complaints.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  return global.complaints!.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 }
 
 export async function getComplaintById(id: string): Promise<Complaint | undefined> {
   await delay(150);
-  return complaints.find(c => c.id === id);
+  return global.complaints!.find(c => c.id === id);
 }
 
 export async function addComplaint(data: Omit<Complaint, 'id' | 'status' | 'createdAt'>): Promise<Complaint> {
@@ -58,16 +66,16 @@ export async function addComplaint(data: Omit<Complaint, 'id' | 'status' | 'crea
     status: 'Reported',
     createdAt: new Date(),
   };
-  complaints.unshift(newComplaint);
+  global.complaints!.unshift(newComplaint);
   return newComplaint;
 }
 
 export async function updateComplaintStatus(id: string, status: ComplaintStatus): Promise<Complaint | undefined> {
   await delay(250);
-  const complaintIndex = complaints.findIndex(c => c.id === id);
+  const complaintIndex = global.complaints!.findIndex(c => c.id === id);
   if (complaintIndex !== -1) {
-    complaints[complaintIndex].status = status;
-    return complaints[complaintIndex];
+    global.complaints![complaintIndex].status = status;
+    return global.complaints![complaintIndex];
   }
   return undefined;
 }
