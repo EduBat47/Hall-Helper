@@ -12,7 +12,7 @@ import { Check, ChevronDown, Circle, Loader2, MoreHorizontal } from 'lucide-reac
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { updateStatusAction } from '@/lib/actions';
-import { useToast } from './ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { categoryIcons } from '@/lib/icons';
 
 type StatusUpdateState = {
